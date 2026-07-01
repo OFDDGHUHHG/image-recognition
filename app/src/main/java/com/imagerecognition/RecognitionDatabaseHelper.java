@@ -32,7 +32,6 @@ public class RecognitionDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create records table
         db.execSQL("CREATE TABLE " + TABLE_RECORDS + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_NAME + " TEXT NOT NULL, " +
@@ -41,7 +40,6 @@ public class RecognitionDatabaseHelper extends SQLiteOpenHelper {
                 COL_CREATED_AT + " INTEGER DEFAULT (strftime('%s', 'now'))" +
                 ")");
 
-        // Create training table
         db.execSQL("CREATE TABLE " + TABLE_TRAINING + " (" +
                 COL_TRAIN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_TRAIN_LABEL + " TEXT NOT NULL, " +
@@ -73,9 +71,25 @@ public class RecognitionDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor searchRecords(String keyword) {
         SQLiteDatabase db = getReadableDatabase();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getAllRecords();
+        }
         String selection = COL_NAME + " LIKE ? OR " + COL_DESCRIPTION + " LIKE ?";
         String[] selectionArgs = {"%" + keyword + "%", "%" + keyword + "%"};
         return db.query(TABLE_RECORDS, null, selection, selectionArgs, null, null, COL_CREATED_AT + " DESC");
+    }
+
+    public Cursor getRecordById(long id) {
+        SQLiteDatabase db = getReadableDatabase();
+        return db.query(TABLE_RECORDS, null, COL_ID + "=?", new String[]{String.valueOf(id)}, null, null, null);
+    }
+
+    public int updateRecord(long id, String name, String description) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_NAME, name);
+        values.put(COL_DESCRIPTION, description);
+        return db.update(TABLE_RECORDS, values, COL_ID + "=?", new String[]{String.valueOf(id)});
     }
 
     public int deleteRecord(long id) {
@@ -94,7 +108,7 @@ public class RecognitionDatabaseHelper extends SQLiteOpenHelper {
 
     public Cursor getAllTrainLabels() {
         SQLiteDatabase db = getReadableDatabase();
-        return db.rawQuery("SELECT " + COL_TRAIN_LABEL + ", COUNT(*) as " + COL_TRAIN_COUNT + 
+        return db.rawQuery("SELECT " + COL_TRAIN_LABEL + ", COUNT(*) as " + COL_TRAIN_COUNT +
                 " FROM " + TABLE_TRAINING + " GROUP BY " + COL_TRAIN_LABEL + " ORDER BY " + COL_TRAIN_LABEL, null);
     }
 
@@ -105,8 +119,7 @@ public class RecognitionDatabaseHelper extends SQLiteOpenHelper {
 
     public int deleteTrainLabel(long id) {
         SQLiteDatabase db = getWritableDatabase();
-        // First get the label
-        Cursor cursor = db.query(TABLE_TRAINING, new String[]{COL_TRAIN_LABEL}, COL_TRAIN_ID + "=?", 
+        Cursor cursor = db.query(TABLE_TRAINING, new String[]{COL_TRAIN_LABEL}, COL_TRAIN_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null);
         if (cursor.moveToFirst()) {
             String label = cursor.getString(0);

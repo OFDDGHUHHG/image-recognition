@@ -18,14 +18,6 @@
             android:gravity="center_vertical"
             android:padding="8dp">
 
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@android:drawable/ic_menu_revert"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="返回" />
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -33,20 +25,18 @@
                 android:text="设置"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                android:textColor="#333333"
                 android:gravity="center" />
-
-            <View
-                android:layout_width="40dp"
-                android:layout_height="40dp" />
         </LinearLayout>
 
         <!-- Token设置 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="百度识物Token"
-            android:textSize="16sp"
+            android:text="百度识物Token (Access Token)"
+            android:textSize="15sp"
             android:textStyle="bold"
+            android:textColor="#333333"
             android:layout_marginTop="16dp" />
 
         <EditText
@@ -54,18 +44,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入Access Token"
+            android:textColor="#333333"
+            android:textColorHint="#AAAAAA"
             android:background="@drawable/edit_bg"
             android:padding="12dp"
             android:layout_marginTop="8dp"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textSize="14sp" />
 
         <!-- API Key设置 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="API Key"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
+            android:textColor="#333333"
             android:layout_marginTop="16dp" />
 
         <EditText
@@ -73,18 +67,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入API Key"
+            android:textColor="#333333"
+            android:textColorHint="#AAAAAA"
             android:background="@drawable/edit_bg"
             android:padding="12dp"
             android:layout_marginTop="8dp"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textSize="14sp" />
 
         <!-- Secret Key设置 -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Secret Key"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
+            android:textColor="#333333"
             android:layout_marginTop="16dp" />
 
         <EditText
@@ -92,10 +90,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="请输入Secret Key"
+            android:textColor="#333333"
+            android:textColorHint="#AAAAAA"
             android:background="@drawable/edit_bg"
             android:padding="12dp"
             android:layout_marginTop="8dp"
-            android:inputType="text" />
+            android:inputType="text"
+            android:textSize="14sp" />
 
         <!-- 获取Token按钮 -->
         <Button
@@ -105,6 +106,7 @@
             android:text="自动获取Token"
             android:backgroundTint="#2196F3"
             android:textColor="#FFFFFF"
+            android:textSize="16sp"
             android:layout_marginTop="16dp" />
 
         <!-- 保存按钮 -->
@@ -115,6 +117,7 @@
             android:text="保存设置"
             android:backgroundTint="#4CAF50"
             android:textColor="#FFFFFF"
+            android:textSize="16sp"
             android:layout_marginTop="8dp" />
 
         <!-- 帮助信息 -->
@@ -124,10 +127,11 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="14sp"
-            android:textColor="#666666"
+            android:textColor="#333333"
             android:background="@drawable/card_bg"
             android:padding="16dp"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="24dp"
+            android:lineSpacingExtra="4dp" />
 
     </LinearLayout>
 </ScrollView>

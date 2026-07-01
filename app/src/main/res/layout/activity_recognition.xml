@@ -39,7 +39,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:fillViewport="true">
 
         <LinearLayout
@@ -52,7 +53,7 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="220dp"
                 android:scaleType="centerCrop"
                 android:background="#E0E0E0" />
 
@@ -61,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/card_bg"
                 android:padding="16dp">
 
@@ -78,10 +79,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="点击下方按钮开始识别"
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:minHeight="60dp" />
+                    android:text="正在自动识别..."
+                    android:textSize="15sp"
+                    android:textColor="#333333"
+                    android:minHeight="40dp" />
 
                 <ProgressBar
                     android:id="@+id/progressBar"
@@ -97,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 android:background="@drawable/card_bg"
                 android:padding="16dp">
 
@@ -114,10 +115,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:hint="名称（如：玫瑰花）"
+                    android:hint="名称（识别后自动填充）"
                     android:background="@drawable/edit_bg"
                     android:padding="12dp"
-                    android:textSize="14sp" />
+                    android:textSize="15sp"
+                    android:textColor="#333333"
+                    android:textColorHint="#AAAAAA" />
 
                 <EditText
                     android:id="@+id/etDescription"
@@ -128,39 +131,46 @@
                     android:background="@drawable/edit_bg"
                     android:padding="12dp"
                     android:textSize="14sp"
-                    android:minLines="3"
+                    android:textColor="#333333"
+                    android:textColorHint="#AAAAAA"
+                    android:minLines="2"
                     android:gravity="top" />
             </LinearLayout>
 
-            <!-- Action Buttons -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp">
-
-                <Button
-                    android:id="@+id/btnRecognize"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:text="开始识别"
-                    android:textSize="16sp"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginEnd="8dp" />
-
-                <Button
-                    android:id="@+id/btnSave"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:text="保存记录"
-                    android:textSize="16sp"
-                    android:backgroundTint="#4CAF50"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginStart="8dp" />
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="#FFFFFF">
+
+        <Button
+            android:id="@+id/btnRecognize"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="重新识别"
+            android:textSize="15sp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="#FFFFFF" />
+
+        <View
+            android:layout_width="12dp"
+            android:layout_height="0dp" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="保存记录"
+            android:textSize="15sp"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -8,12 +8,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -25,7 +27,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView listHistory;
     private TextView tvEmpty;
+    private EditText etSearch;
     private RecognitionDatabaseHelper dbHelper;
     private SimpleCursorAdapter adapter;
 
@@ -50,9 +52,29 @@ public class MainActivity extends AppCompatActivity {
 
         listHistory = findViewById(R.id.listHistory);
         tvEmpty = findViewById(R.id.tvEmpty);
+        etSearch = findViewById(R.id.etSearch);
 
         setupListView();
+        setupSearch();
         loadHistory();
+    }
+
+    private void setupSearch() {
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String keyword = s.toString().trim();
+                Cursor cursor = dbHelper.searchRecords(keyword.isEmpty() ? null : keyword);
+                adapter.changeCursor(cursor);
+                tvEmpty.setVisibility(cursor.getCount() == 0 ? View.VISIBLE : View.GONE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
     private void setupListView() {
@@ -66,19 +88,26 @@ public class MainActivity extends AppCompatActivity {
         );
         listHistory.setAdapter(adapter);
 
+        // Click to view detail or edit
         listHistory.setOnItemClickListener((parent, view, position, id) -> {
             Cursor cursor = (Cursor) adapter.getItem(position);
             if (cursor != null) {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(RecognitionDatabaseHelper.COL_NAME));
                 String desc = cursor.getString(cursor.getColumnIndexOrThrow(RecognitionDatabaseHelper.COL_DESCRIPTION));
-                showDetailDialog(name, desc);
+                showEditDialog(id, name, desc);
             }
         });
 
+        // Long press to delete
         listHistory.setOnItemLongClickListener((parent, view, position, id) -> {
+            Cursor cursor = (Cursor) adapter.getItem(position);
+            String name = "";
+            if (cursor != null) {
+                name = cursor.getString(cursor.getColumnIndexOrThrow(RecognitionDatabaseHelper.COL_NAME));
+            }
             new AlertDialog.Builder(this)
                     .setTitle("删除记录")
-                    .setMessage("确定要删除这条记录吗？")
+                    .setMessage("确定要删除「" + name + "」吗？")
                     .setPositiveButton("删除", (d, w) -> {
                         dbHelper.deleteRecord(id);
                         loadHistory();
@@ -88,6 +117,63 @@ public class MainActivity extends AppCompatActivity {
                     .show();
             return true;
         });
+    }
+
+    private void showEditDialog(long id, String currentName, String currentDesc) {
+        // Build a custom dialog with EditTexts
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(48, 32, 48, 16);
+
+        final EditText etName = new EditText(this);
+        etName.setHint("名称");
+        etName.setText(currentName);
+        etName.setSingleLine(true);
+        layout.addView(etName);
+
+        final EditText etDesc = new EditText(this);
+        etDesc.setHint("描述");
+        etDesc.setText(currentDesc != null ? currentDesc : "");
+        etDesc.setMinLines(3);
+        etDesc.setGravity(android.view.Gravity.TOP);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.topMargin = 16;
+        layout.addView(etDesc, lp);
+
+        new AlertDialog.Builder(this)
+                .setTitle("编辑记录")
+                .setView(layout)
+                .setPositiveButton("保存", (d, w) -> {
+                    String newName = etName.getText().toString().trim();
+                    String newDesc = etDesc.getText().toString().trim();
+                    if (newName.isEmpty()) {
+                        Toast.makeText(this, "名称不能为空", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    int rows = dbHelper.updateRecord(id, newName, newDesc);
+                    if (rows > 0) {
+                        Toast.makeText(this, "已更新", Toast.LENGTH_SHORT).show();
+                        loadHistory();
+                    } else {
+                        Toast.makeText(this, "更新失败", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("取消", null)
+                .setNeutralButton("删除", (d, w) -> {
+                    new AlertDialog.Builder(this)
+                            .setTitle("确认删除")
+                            .setMessage("确定要删除这条记录吗？")
+                            .setPositiveButton("删除", (d2, w2) -> {
+                                dbHelper.deleteRecord(id);
+                                loadHistory();
+                                Toast.makeText(this, "已删除", Toast.LENGTH_SHORT).show();
+                            })
+                            .setNegativeButton("取消", null)
+                            .show();
+                })
+                .show();
     }
 
     private void loadHistory() {
@@ -105,12 +191,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSelectImage(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, REQUEST_PICK_IMAGE);
     }
 
     private void takePhoto() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_TAKE_PHOTO);
         }
@@ -150,7 +236,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startRecognitionActivity(Bitmap bitmap) {
-        // Save bitmap to temp file
         try {
             File tempFile = new File(getCacheDir(), "temp_image.jpg");
             FileOutputStream fos = new FileOutputStream(tempFile);
@@ -163,14 +248,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "处理图片失败", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void showDetailDialog(String name, String description) {
-        new AlertDialog.Builder(this)
-                .setTitle(name)
-                .setMessage(description)
-                .setPositiveButton("确定", null)
-                .show();
     }
 
     @Override
@@ -198,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
     private void showAboutDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("拍照识物APP")
-                .setMessage("版本：1.0\n\n功能：\n• 拍照/选择图片识别物体\n• 百度识物API（需配置token）\n• 本地训练自定义标签\n• 识别记录保存\n\n富二代好牛逼\n微信：L597551791\n更新日期：2025-06-30")
+                .setMessage("版本：1.1\n\n功能：\n• 拍照/选择图片识别物体\n• 百度识物API（需配置token）\n• 本地训练自定义标签\n• 识别记录保存/搜索/编辑/删除\n\n富二代好牛逼\n微信：L597551791\n更新日期：2025-07-02")
                 .setPositiveButton("确定", null)
                 .show();
     }

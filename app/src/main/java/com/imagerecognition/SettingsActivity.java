@@ -84,11 +84,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     private String fetchAccessToken(String apiKey, String secretKey) throws Exception {
         String url = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=" + apiKey + "&client_secret=" + secretKey;
-        
+
         java.net.HttpURLConnection conn = (java.net.HttpURLConnection) new java.net.URL(url).openConnection();
         conn.setRequestMethod("POST");
-        
-        java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
+        conn.setConnectTimeout(15000);
+        conn.setReadTimeout(15000);
+
+        java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(), "UTF-8"));
         StringBuilder response = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
