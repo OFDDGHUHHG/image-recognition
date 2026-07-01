@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">拍照识物</string>
+    <string name="btn_take_photo">拍照识别</string>
+    <string name="btn_select_photo">选择图片</string>
+    <string name="btn_settings">设置</string>
+    <string name="btn_training">训练样本</string>
+    <string name="btn_recognize">开始识别</string>
+    <string name="btn_save">保存记录</string>
+    <string name="btn_cancel">取消</string>
+    <string name="btn_delete">删除</string>
+    <string name="btn_add_sample">添加样本</string>
+    <string name="hint_access_token">百度识物 Access Token</string>
+    <string name="hint_secret_key">Secret Key</string>
+    <string name="hint_label">样本名称</string>
+    <string name="hint_description">描述内容</string>
+    <string name="title_settings">设置</string>
+    <string name="title_training">训练样本</string>
+    <string name="title_recognition">识别结果</string>
+    <string name="msg_no_token">请先设置百度识物Token</string>
+    <string name="msg_recognizing">正在识别...</string>
+    <string name="msg_recognition_success">识别成功</string>
+    <string name="msg_recognition_failed">识别失败</string>
+    <string name="msg_saved">已保存</string>
+    <string name="msg_deleted">已删除</string>
+    <string name="msg_permission_denied">需要相机和存储权限</string>
+    <string name="msg_no_camera">设备不支持相机</string>
+    <string name="msg_training_saved">训练样本已保存</string>
+    <string name="msg_local_match">本地匹配结果</string>
+    <string name="label_recent">最近识别</string>
+    <string name="label_no_records">暂无识别记录</string>
+    <string name="label_no_samples">暂无训练样本</string>
+    <string name="about_text">拍照识物APP v1.0\n\n使用百度识物API进行物体识别\n支持本地训练样本匹配\n\n联系：富二代好牛逼\n微信：L597551791</string>
+</resources>
