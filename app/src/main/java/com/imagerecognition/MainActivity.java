@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 this,
                 R.layout.item_history,
                 null,
-                new String[]{RecognitionDatabaseHelper.COL_NAME, RecognitionDatabaseHelper.COL_DESCRIPTION, RecognitionDatabaseHelper.COL_DATE},
+                new String[]{RecognitionDatabaseHelper.COL_NAME, RecognitionDatabaseHelper.COL_DESCRIPTION, RecognitionDatabaseHelper.COL_CREATED_AT},
                 new int[]{R.id.tvName, R.id.tvDescription, R.id.tvDate},
                 0
         );
