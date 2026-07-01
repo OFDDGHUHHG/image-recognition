@@ -1,117 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#F5F5F5">
 
-    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="#2196F3"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_revert"
-            android:contentDescription="返回" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="设置"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginStart="8dp" />
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        <!-- 标题栏 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="8dp">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@android:drawable/ic_menu_revert"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="返回" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="百度识物API设置"
-                android:textSize="16sp"
+                android:layout_weight="1"
+                android:text="设置"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="请前往 https://ai.baidu.com 申请免费API Key和Secret Key"
-                android:textSize="12sp"
-                android:textColor="#666666"
-                android:layout_marginBottom="16dp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-                <EditText
-                    android:id="@+id/etApiKey"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="API Key"
-                    android:inputType="text" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
-
-                <EditText
-                    android:id="@+id/etSecretKey"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Secret Key"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="保存设置"
-                android:backgroundTint="#4CAF50" />
+                android:gravity="center" />
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#DDDDDD"
-                android:layout_marginVertical="24dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="关于"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="拍照识物APP v1.0\n\n功能：\n• 拍照/选择图片识别物体\n• 百度识物API集成\n• 本地训练自定义标签\n• 识别记录保存和查看\n\n富二代好牛逼\n微信：L597551791"
-                android:textSize="14sp"
-                android:lineSpacingExtra="4dp" />
-
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+
+        <!-- Token设置 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="百度识物Token"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/etToken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入Access Token"
+            android:background="@drawable/edit_bg"
+            android:padding="12dp"
+            android:layout_marginTop="8dp"
+            android:inputType="text" />
+
+        <!-- API Key设置 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="API Key"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/etApiKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入API Key"
+            android:background="@drawable/edit_bg"
+            android:padding="12dp"
+            android:layout_marginTop="8dp"
+            android:inputType="text" />
+
+        <!-- Secret Key设置 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Secret Key"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/etSecretKey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入Secret Key"
+            android:background="@drawable/edit_bg"
+            android:padding="12dp"
+            android:layout_marginTop="8dp"
+            android:inputType="text" />
+
+        <!-- 获取Token按钮 -->
+        <Button
+            android:id="@+id/btnGetToken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="自动获取Token"
+            android:backgroundTint="#2196F3"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="16dp" />
+
+        <!-- 保存按钮 -->
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="保存设置"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp" />
+
+        <!-- 帮助信息 -->
+        <TextView
+            android:id="@+id/tvHelp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:background="@drawable/card_bg"
+            android:padding="16dp"
+            android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+</ScrollView>

@@ -9,17 +9,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#2196F3"
+        android:background="@color/colorPrimary"
         android:gravity="center_vertical"
-        android:padding="16dp">
+        android:paddingHorizontal="16dp">
 
-        <ImageButton
+        <TextView
             android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_revert"
-            android:contentDescription="返回" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="返回"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:padding="8dp" />
 
         <TextView
             android:layout_width="0dp"
@@ -29,12 +30,17 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginStart="8dp" />
+            android:gravity="center" />
+
+        <View
+            android:layout_width="48dp"
+            android:layout_height="1dp" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,40 +48,119 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <!-- Image Preview -->
             <ImageView
-                android:id="@+id/imageResult"
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#FFFFFF"
-                android:scaleType="centerCrop" />
+                android:layout_height="240dp"
+                android:scaleType="centerCrop"
+                android:background="#E0E0E0" />
 
-            <TextView
-                android:id="@+id/tvResultTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="识别结果"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvResultContent"
+            <!-- Recognition Result -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="#FFFFFF"
-                android:padding="16dp"
-                android:textSize="14sp"
-                android:minHeight="150dp" />
-
-            <Button
-                android:id="@+id/btnCopy"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:orientation="vertical"
                 android:layout_marginTop="16dp"
-                android:text="复制结果"
-                android:backgroundTint="#2196F3" />
+                android:background="@drawable/card_bg"
+                android:padding="16dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="识别结果"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#333333" />
+
+                <TextView
+                    android:id="@+id/tvResult"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="点击下方按钮开始识别"
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:minHeight="60dp" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Record Form -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/card_bg"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="保存记录"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="#333333" />
+
+                <EditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="名称（如：玫瑰花）"
+                    android:background="@drawable/edit_bg"
+                    android:padding="12dp"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/etDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:hint="描述/备注"
+                    android:background="@drawable/edit_bg"
+                    android:padding="12dp"
+                    android:textSize="14sp"
+                    android:minLines="3"
+                    android:gravity="top" />
+            </LinearLayout>
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp">
+
+                <Button
+                    android:id="@+id/btnRecognize"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="开始识别"
+                    android:textSize="16sp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="保存记录"
+                    android:textSize="16sp"
+                    android:backgroundTint="#4CAF50"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
