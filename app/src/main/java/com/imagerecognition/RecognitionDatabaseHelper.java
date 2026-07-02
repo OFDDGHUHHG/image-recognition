@@ -69,6 +69,22 @@ public class RecognitionDatabaseHelper extends SQLiteOpenHelper {
         return db.query(TABLE_RECORDS, null, null, null, null, null, COL_CREATED_AT + " DESC");
     }
 
+    public Cursor getAllRecords(int limit) {
+        SQLiteDatabase db = getReadableDatabase();
+        return db.query(TABLE_RECORDS, null, null, null, null, null, COL_CREATED_AT + " DESC", String.valueOf(limit));
+    }
+
+    public int getRecordCount() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_RECORDS, null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+
     public Cursor searchRecords(String keyword) {
         SQLiteDatabase db = getReadableDatabase();
         if (keyword == null || keyword.trim().isEmpty()) {
@@ -77,6 +93,16 @@ public class RecognitionDatabaseHelper extends SQLiteOpenHelper {
         String selection = COL_NAME + " LIKE ? OR " + COL_DESCRIPTION + " LIKE ?";
         String[] selectionArgs = {"%" + keyword + "%", "%" + keyword + "%"};
         return db.query(TABLE_RECORDS, null, selection, selectionArgs, null, null, COL_CREATED_AT + " DESC");
+    }
+
+    public Cursor searchRecords(String keyword, int limit) {
+        SQLiteDatabase db = getReadableDatabase();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getAllRecords(limit);
+        }
+        String selection = COL_NAME + " LIKE ? OR " + COL_DESCRIPTION + " LIKE ?";
+        String[] selectionArgs = {"%" + keyword + "%", "%" + keyword + "%"};
+        return db.query(TABLE_RECORDS, null, selection, selectionArgs, null, null, COL_CREATED_AT + " DESC", String.valueOf(limit));
     }
 
     public Cursor getRecordById(long id) {

@@ -58,6 +58,19 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="8dp" />
 
+    <!-- 展开/收起按钮 -->
+    <TextView
+        android:id="@+id/tvToggleMore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="展开更多记录"
+        android:textSize="14sp"
+        android:textColor="#2196F3"
+        android:gravity="center"
+        android:padding="12dp"
+        android:background="#FFFFFF"
+        android:visibility="gone" />
+
     <!-- 空状态提示 -->
     <TextView
         android:id="@+id/tvEmpty"

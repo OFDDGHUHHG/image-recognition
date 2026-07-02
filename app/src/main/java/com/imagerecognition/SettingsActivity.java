@@ -37,10 +37,15 @@ public class SettingsActivity extends AppCompatActivity {
                 "1. 访问百度AI开放平台：ai.baidu.com\n" +
                 "2. 注册/登录账号\n" +
                 "3. 创建应用，获取API Key和Secret Key\n" +
-                "4. 使用下方按钮获取Access Token\n" +
-                "5. 将Token填入上方输入框\n\n" +
-                "注意：Access Token有效期为30天，过期需重新获取\n\n" +
-                "免费额度：通用物体识别每天500次");
+                "4. 在应用中开通以下免费服务：\n" +
+                "   - 通用物体和场景识别\n" +
+                "   - 通用文字识别\n" +
+                "5. 使用下方按钮获取Access Token\n\n" +
+                "注意：\n" +
+                "- Access Token有效期30天，过期需重新获取\n" +
+                "- 物体识别和文字识别共用同一个Token\n" +
+                "- 物体识别免费500次/天\n" +
+                "- 文字识别免费500次/天");
 
         btnSave.setOnClickListener(v -> saveSettings());
         findViewById(R.id.btnGetToken).setOnClickListener(v -> getToken());

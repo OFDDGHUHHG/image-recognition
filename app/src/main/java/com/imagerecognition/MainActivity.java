@@ -13,7 +13,6 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -36,12 +35,16 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 100;
     private static final int REQUEST_TAKE_PHOTO = 101;
     private static final int REQUEST_PICK_IMAGE = 102;
+    private static final int PAGE_SIZE = 10;
 
     private ListView listHistory;
     private TextView tvEmpty;
     private EditText etSearch;
+    private TextView tvToggleMore;
     private RecognitionDatabaseHelper dbHelper;
     private SimpleCursorAdapter adapter;
+    private boolean expanded = false;
+    private String currentSearch = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +56,11 @@ public class MainActivity extends AppCompatActivity {
         listHistory = findViewById(R.id.listHistory);
         tvEmpty = findViewById(R.id.tvEmpty);
         etSearch = findViewById(R.id.etSearch);
+        tvToggleMore = findViewById(R.id.tvToggleMore);
 
         setupListView();
         setupSearch();
+        setupToggle();
         loadHistory();
     }
 
@@ -66,14 +71,19 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String keyword = s.toString().trim();
-                Cursor cursor = dbHelper.searchRecords(keyword.isEmpty() ? null : keyword);
-                adapter.changeCursor(cursor);
-                tvEmpty.setVisibility(cursor.getCount() == 0 ? View.VISIBLE : View.GONE);
+                currentSearch = s.toString().trim();
+                loadHistory();
             }
 
             @Override
             public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private void setupToggle() {
+        tvToggleMore.setOnClickListener(v -> {
+            expanded = !expanded;
+            loadHistory();
         });
     }
 
@@ -88,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         );
         listHistory.setAdapter(adapter);
 
-        // Click to view detail or edit
+        // Click to edit
         listHistory.setOnItemClickListener((parent, view, position, id) -> {
             Cursor cursor = (Cursor) adapter.getItem(position);
             if (cursor != null) {
@@ -120,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showEditDialog(long id, String currentName, String currentDesc) {
-        // Build a custom dialog with EditTexts
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(48, 32, 48, 16);
@@ -129,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         etName.setHint("名称");
         etName.setText(currentName);
         etName.setSingleLine(true);
+        etName.setTextColor(0xFF333333);
         layout.addView(etName);
 
         final EditText etDesc = new EditText(this);
@@ -136,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         etDesc.setText(currentDesc != null ? currentDesc : "");
         etDesc.setMinLines(3);
         etDesc.setGravity(android.view.Gravity.TOP);
+        etDesc.setTextColor(0xFF333333);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -177,8 +188,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadHistory() {
-        Cursor cursor = dbHelper.getAllRecords();
+        int totalCount = dbHelper.getRecordCount();
+        boolean hasMore = totalCount > PAGE_SIZE;
+
+        Cursor cursor;
+        if (currentSearch.isEmpty()) {
+            if (!expanded && hasMore) {
+                cursor = dbHelper.getAllRecords(PAGE_SIZE);
+            } else {
+                cursor = dbHelper.getAllRecords();
+            }
+        } else {
+            if (!expanded && hasMore) {
+                cursor = dbHelper.searchRecords(currentSearch, PAGE_SIZE);
+            } else {
+                cursor = dbHelper.searchRecords(currentSearch);
+            }
+        }
+
         adapter.changeCursor(cursor);
+
+        // Update toggle visibility
+        if (hasMore && currentSearch.isEmpty()) {
+            tvToggleMore.setVisibility(View.VISIBLE);
+            int shown = cursor.getCount();
+            if (!expanded) {
+                tvToggleMore.setText("展开更多记录 (共" + totalCount + "条，已显示" + shown + "条)");
+            } else {
+                tvToggleMore.setText("收起记录");
+            }
+        } else {
+            tvToggleMore.setVisibility(View.GONE);
+        }
+
         tvEmpty.setVisibility(cursor.getCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
@@ -275,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
     private void showAboutDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("拍照识物APP")
-                .setMessage("版本：1.1\n\n功能：\n• 拍照/选择图片识别物体\n• 百度识物API（需配置token）\n• 本地训练自定义标签\n• 识别记录保存/搜索/编辑/删除\n\n富二代好牛逼\n微信：L597551791\n更新日期：2025-07-02")
+                .setMessage("版本：1.2\n\n功能：\n• 全图识别所有人物/物体/特征/颜色\n• 百度OCR文字识别\n• 识别记录保存/搜索/编辑/删除\n• 本地训练自定义标签\n\n富二代好牛逼\n微信：L597551791\n更新日期：2025-07-02")
                 .setPositiveButton("确定", null)
                 .show();
     }
